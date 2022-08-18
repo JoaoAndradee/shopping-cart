@@ -43,7 +43,10 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 };
 
 window.onload = async () => {
-  const product = await fetchProducts('computador');
-  const sectionItem = document.querySelector('.items');
-  product.forEach((produto) => sectionItem.appendChild(createProductItemElement(produto)));
+  const { results } = await fetchProducts('computador');
+  results.forEach((produto) => {
+    const { id: sku, title: name, thumbnail: image } = produto;
+    const productInfo = { sku, name, image };
+    document.querySelector('.items').appendChild(createProductItemElement(productInfo));
+  });
 };
