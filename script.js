@@ -1,3 +1,17 @@
+// REQUISITO 11
+const addLoading = () => {
+  const p = document.createElement('p');
+  p.classList.add('loading');
+  p.innerHTML = 'carregando...';
+  return p;
+};
+
+const removeLoading = () => {
+  document.querySelector('.loading').remove();
+};
+
+// FIM
+
 const createProductImageElement = (imageSource) => {
   const img = document.createElement('img');
   img.className = 'item__image';
@@ -43,12 +57,18 @@ const createCartItemElement = ({ sku, name, salePrice }) => {
 };
 
 async function getProducts() {
+  // REQUISITO 11
+  document.getElementsByClassName('container')[0].before(addLoading());
+  // FIM
   const { results } = await fetchProducts('computador');
   results.forEach((produto) => {
     const { id: sku, title: name, thumbnail: image } = produto;
     const productInfo = { sku, name, image };
     document.querySelector('.items').appendChild(createProductItemElement(productInfo));
   });
+  // REQUISITO 11
+  removeLoading();
+  // FIM
 }
 
 const saveCart = (obj) => {
@@ -76,13 +96,13 @@ window.onload = async () => {
 };
 
 // REQUISITO 09
-const p = document.createElement('p');
-p.classList.add('total-price');
-p.style.cssText = 'font-size: 20px;'
-  + 'font-weight: bold;'
-  + 'text-align: center;'
-  + 'margin: 30px 0';
-document.querySelector('.cart__items').after(p);
+// const p = document.createElement('p');
+// p.classList.add('total-price');
+// p.style.cssText = 'font-size: 20px;'
+//   + 'font-weight: bold;'
+//   + 'text-align: center;'
+//   + 'margin: 30px 0';
+// document.querySelector('.cart__items').after(p);
 // FIM
 
 // REQUISITO 10
