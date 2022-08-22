@@ -29,9 +29,9 @@ const getSkuFromProductItem = (item) => item.querySelector('span.item__sku').inn
 const cartItemClickListener = () => {
   document.querySelectorAll('.cart__item').forEach((item) => {
     item.addEventListener('click', () => {
-        item.remove();
+      item.remove();
     });
-});
+  });
 };
 
 const createCartItemElement = ({ sku, name, salePrice }) => {
@@ -51,9 +51,13 @@ async function getProducts() {
   });
 }
 
-getProducts();
+const saveCart = (obj) => {
+  const cartItems = localStorage.cartItems ? JSON.parse(localStorage.cartItems) : [];
+  cartItems.push(obj);
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+};
 
-window.onload = async () => {
+const addAndRemove = async () => {
   document.querySelectorAll('.item__add').forEach((item, index) => {
     item.addEventListener('click', async () => {
       const id = document.querySelectorAll('.item')[index].firstChild.innerText;
@@ -65,3 +69,26 @@ window.onload = async () => {
     });
   });
 };
+
+window.onload = async () => {
+  await getProducts();
+  await addAndRemove();
+};
+
+// REQUISITO 09
+const p = document.createElement('p');
+p.classList.add('total-price');
+p.style.cssText = 'font-size: 20px;'
+  + 'font-weight: bold;'
+  + 'text-align: center;'
+  + 'margin: 30px 0';
+document.querySelector('.cart__items').after(p);
+// FIM
+
+// REQUISITO 10
+document.querySelector('.empty-cart').addEventListener('click', () => {
+  document.querySelectorAll('.cart__item').forEach((item) => {
+    item.remove();
+  });
+});
+// FIM
