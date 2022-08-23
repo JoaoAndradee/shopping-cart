@@ -1,3 +1,12 @@
+// REQUISITO 08
+let cartItems;
+if (getSavedCartItems() === null) {
+  cartItems = [];
+} else {
+  cartItems = JSON.parse(getSavedCartItems());
+}
+// FIM
+
 // REQUISITO 11
 const addLoading = () => {
   const p = document.createElement('p');
@@ -71,12 +80,6 @@ async function getProducts() {
   // FIM
 }
 
-const saveCart = (obj) => {
-  const cartItems = localStorage.cartItems ? JSON.parse(localStorage.cartItems) : [];
-  cartItems.push(obj);
-  localStorage.setItem('cartItems', JSON.stringify(cartItems));
-};
-
 const addAndRemove = async () => {
   document.querySelectorAll('.item__add').forEach((item, index) => {
     item.addEventListener('click', async () => {
@@ -86,11 +89,25 @@ const addAndRemove = async () => {
       const objProduct = { sku, name, salePrice };
       document.querySelector('.cart__items').appendChild(createCartItemElement(objProduct));
       cartItemClickListener();
+      // REQUISITO 08
+
+      cartItems.push(objProduct);
+      saveCartItems(JSON.stringify(cartItems));
+      // FIM
     });
   });
 };
 
 window.onload = async () => {
+  // REQUISITO 08
+  const arrayCart = JSON.parse(getSavedCartItems());
+  if (cartItems.length > 1) {
+    arrayCart.forEach((item) => {
+      document.querySelector('.cart__items').appendChild(createCartItemElement(item));
+    });
+  }
+  await cartItemClickListener();
+  // FIM
   await getProducts();
   await addAndRemove();
 };
